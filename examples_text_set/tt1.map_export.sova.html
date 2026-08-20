@@ -1,0 +1,2247 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>СОВА — Экспорт Карты (Прототип)</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<style>
+  :root {
+    --va-bg: #f8f9fa;
+    --va-panel-bg: #ffffff;
+    --va-accent: #e94560;
+    --va-accent-light: #ff6b6b;
+    --va-blue: #5dade2;
+    --va-text: #333;
+    --va-muted: #6c757d;
+    --va-border: #dee2e6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Georgia, serif;
+    font-size: 14px;
+    color: var(--va-text);
+    background: var(--va-bg);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+  }
+  /* Sidebar */
+  #sidebar {
+    width: 340px;
+    height: 100vh;
+    background: var(--va-panel-bg);
+    border-right: 1px solid var(--va-border);
+    padding: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  /* Фиксируем элементы, чтобы они не сжимались */
+  #sidebar > div:not(#table-wrap) {
+    flex-shrink: 0;
+  }
+  #sidebar h2 {
+    font-size: 18px;
+    color: var(--va-accent);
+    margin-bottom: 4px;
+  }
+  .section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--va-muted);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .settings {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .settings label {
+    font-size: 11px;
+    color: var(--va-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .settings input, .settings select {
+    padding: 8px;
+    background: #fff;
+    border: 1px solid var(--va-border);
+    border-radius: 6px;
+    color: var(--va-text);
+    font-size: 12px;
+    width: 80px;
+  }
+  
+  .btn-row {
+    display: flex;
+    gap: 8px;
+  }
+  .btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn.primary { background: var(--va-accent); color: white; }
+  .btn.primary:hover { background: var(--va-accent-light); }
+  .btn.secondary { background: var(--va-border); color: var(--va-muted); }
+  .btn.secondary:hover { background: #ced4da; }
+  .controls-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    flex-wrap: nowrap;
+  }
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .control-group:first-child {
+    flex: 1;
+    min-width: 80px;
+  }
+  .control-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--va-muted);
+    font-weight: 600;
+  }
+  .control-group select,
+  .control-group input {
+    padding: 8px 4px;
+    background: #fff;
+    border: 1px solid var(--va-border);
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--va-text);
+    width: 100%;
+  }
+  .control-group:nth-child(2) input {
+    width: 50px;
+    text-align: center;
+  }
+  .controls-row .btn {
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+  .controls-row .btn.secondary {
+    flex: none;
+    width: 36px;
+    padding: 8px 0;
+    text-align: center;
+  }
+  /* Table */
+
+
+.table-section {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+
+.table-section .section-label {
+  flex-shrink: 0;
+}
+  #table-wrap {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid var(--va-border);
+    border-radius: 6px;
+    min-height: 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  th {
+    position: sticky;
+    top: 0;
+    background: #e9ecef;
+    padding: 6px 8px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #ccc;
+    white-space: nowrap;
+    z-index: 1;
+  }
+  td {
+    padding: 5px 8px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+  }
+  #table-body td:nth-child(4) {
+    overflow-wrap: anywhere;
+  }
+  tr.active { background: #fff3e0; }
+  tr:hover { background: #f8f9fa; }
+  .footer {
+    font-size: 10px;
+    color: #999;
+    text-align: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--va-border);
+    line-height: 1.5;
+  }
+  .footer a { color: var(--va-accent); text-decoration: none; }
+  /* Main area */
+  #main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  #map-wrap {
+    flex: 1;
+    position: relative;
+    min-height: 0;
+  }
+  #map { width: 100%; height: 100%; }
+  .map-control-panel {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.95);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--va-border);
+    font-size: 12px;
+    z-index: 500;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .map-control-panel label {
+    font-weight: 600;
+    color: var(--va-text);
+    white-space: nowrap;
+  }
+  .map-control-panel select {
+    padding: 6px 8px;
+    background: #fff;
+    border: 1px solid var(--va-border);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--va-text);
+    cursor: pointer;
+  }
+
+  .map-attribution {
+    position: absolute;
+    bottom: 4px;
+    right: 8px;
+    font-size: 11px;
+    color: #999;
+    z-index: 500;
+    pointer-events: auto;
+    line-height: 1.4;
+    text-align: right;
+  }
+  .map-attribution a {
+    color: #999;
+    text-decoration: none;
+    border-bottom: 1px dotted #bbb;
+  }
+  .map-attribution a:hover {
+    color: var(--va-accent);
+    border-bottom-color: var(--va-accent);
+  }
+
+  /* Legend */
+  .legend {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(255,255,255,0.95);
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--va-border);
+    font-size: 12px;
+    z-index: 500;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: none;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .legend-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid white; box-shadow: 0 0 0 1px #ccc;
+  }
+  /* Popup */
+  .leaflet-popup-content-wrapper {
+    border-radius: 8px !important;
+    border: 1px solid var(--va-accent) !important;
+    font-size: 13px !important;
+  }
+  /* Marker icon */
+  .marker-icon {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    border: 2px solid #fff;
+  }
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.25); }
+    100% { transform: scale(1); }
+  }
+  .marker-fresh {
+    animation: pulse 0.6s ease;
+    box-shadow: 0 0 0 3px white, 0 0 0 5px var(--va-accent), 0 2px 8px rgba(0,0,0,0.4) !important;
+  }
+  /* Timeline */
+  #timeline {
+    height: 120px;
+    background: var(--va-panel-bg);
+    border-top: 1px solid var(--va-border);
+    padding: 12px 24px;
+    flex-shrink: 0;
+    user-select: none;
+  }
+  #tl-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  #tl-date {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--va-accent);
+    font-family: 'Consolas', monospace;
+  }
+  #tl-range { font-size: 11px; color: var(--va-muted); }
+  #tl-track-wrap { position: relative; padding: 8px 0; }
+  #tl-track {
+    position: relative;
+    width: 100%;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  #tl-fill {
+    position: absolute; left: 0; top: 0; height: 100%;
+    background: linear-gradient(90deg, var(--va-accent), var(--va-accent-light));
+    border-radius: 3px; width: 0%; pointer-events: none;
+  }
+  #tl-thumb {
+    position: absolute; top: 50%; transform: translate(-50%, -50%);
+    width: 16px; height: 16px; background: var(--va-accent);
+    border: 3px solid white; border-radius: 50%;
+    cursor: grab; z-index: 10; left: 0%;
+    box-shadow: 0 2px 8px rgba(233,69,96,0.4);
+  }
+  #tl-thumb:active { cursor: grabbing; }
+  #tl-ticks, #tl-events { position: relative; width: 100%; }
+  #tl-ticks { height: 20px; margin-top: 2px; }
+  #tl-events { height: 14px; margin-top: 2px; }
+  .tick { position: absolute; top: 0; transform: translateX(-50%); text-align: center; }
+  .tick-line { width: 1px; height: 6px; background: var(--va-muted); margin: 0 auto 2px; }
+  .tick-label { font-size: 9px; color: var(--va-muted); white-space: nowrap; }
+  .event-dot {
+    position: absolute; bottom: -2px; transform: translateX(-50%);
+    width: 8px; height: 8px; background: var(--va-blue);
+    border-radius: 50%; cursor: pointer;
+    border: 2px solid var(--va-panel-bg); z-index: 5;
+  }
+  .event-dot:hover, .event-dot.active {
+    width: 12px; height: 12px;
+    background: var(--va-accent); border-color: white;
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div>
+    <div id="project-title" style="font-size:18px; font-weight:bold; color:var(--va-text); line-height:1.3; margin-bottom:4px;">Томские трущобы. Книга 1</div>
+    <div style="font-size:11px; color:var(--va-muted); letter-spacing:0.5px;">Геовизуализация выполнена в программе <b style="color:var(--va-accent);">СОВА</b></div>
+  </div>
+
+  <div class="controls-row">
+    <div class="control-group">
+      <label class="control-label" for="mode-select">Режим</label>
+      <select id="mode-select">
+        <option value="event">События</option>
+        <option value="time">Время</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="speed-input">Скорость</label>
+      <input type="number" id="speed-input" value="2" min="0.5" max="10" step="0.5">
+    </div>
+    <button class="btn primary" id="play-btn">▶ Играть</button>
+    <button class="btn secondary" id="reset-btn">↺</button>
+  </div>
+
+  <div class="table-section">
+    <div class="section-label">Точки маршрута</div>
+    <div id="table-wrap">
+      <table>
+        <thead><tr><th>№</th><th>Название</th><th>Дата</th><th>Прим.</th></tr></thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    Создано в <b>СОВА</b> — Текст и Карта<br>
+    © Марина Шилова | <a href="mailto:marvsh@yandex.ru">marvsh@yandex.ru</a>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <div id="map-wrap">
+    <div id="map"></div>
+    <div id="map"></div>
+    <div class="map-attribution">
+      <a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a> |
+      © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OSM</a> |
+      <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>
+    </div>
+    <div class="map-control-panel" id="zoom-panel">
+      <label for="max-zoom-select">Макс. зум</label>
+      <select id="max-zoom-select">
+        <option value="18">Дом</option>
+        <option value="14" selected>Улица</option>
+        <option value="11">Город</option>
+        <option value="8">Область</option>
+        <option value="5">Регион</option>
+      </select>
+    </div>
+    <div class="legend" id="legend"></div>
+  </div>
+  <div id="timeline">
+    <div id="tl-header">
+      <div id="tl-date">—</div>
+      <div id="tl-range">—</div>
+    </div>
+    <div id="tl-track-wrap">
+      <div id="tl-track"><div id="tl-fill"></div><div id="tl-thumb"></div></div>
+    </div>
+    <div id="tl-events"></div>
+    <div id="tl-ticks"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+
+// === ДАННЫЕ ПРОЕКТА (автоматически подставляются при экспорте) ===
+const DATA = [
+  {
+    "id": "g-032",
+    "name": "«Белая харчевня и чайная»",
+    "lat": 56.4887,
+    "lon": 84.9677,
+    "date": "1902-09-10T20:00:00",
+    "group": "трактир",
+    "order": 1,
+    "description": ""
+  },
+  {
+    "id": "g-034",
+    "name": "Свято-Троицкая церковь",
+    "lat": 56.49,
+    "lon": 84.9648,
+    "date": "1902-09-10T20:05:00",
+    "group": "церкви",
+    "order": 2,
+    "description": ""
+  },
+  {
+    "id": "g-039",
+    "name": "«Белая харчевня и чайная»",
+    "lat": 56.4888,
+    "lon": 84.9677,
+    "date": "1902-09-10T21:30:00",
+    "group": "трактир",
+    "order": 3,
+    "description": ""
+  },
+  {
+    "id": "g-043",
+    "name": "у Орлихи",
+    "lat": 56.4883,
+    "lon": 84.9616,
+    "date": "1902-09-10T23:30:00",
+    "group": "притоны",
+    "order": 4,
+    "description": ""
+  },
+  {
+    "id": "g-058",
+    "name": "Андроновский винокуренный завод",
+    "lat": 56.5074,
+    "lon": 84.9404,
+    "date": "1902-09-11T02:15:00",
+    "group": "заведения",
+    "order": 5,
+    "description": ""
+  },
+  {
+    "id": "g-065",
+    "name": "набережная",
+    "lat": 56.5034,
+    "lon": 84.9371,
+    "date": "1902-09-11T02:20:00",
+    "group": "улицы",
+    "order": 6,
+    "description": ""
+  },
+  {
+    "id": "g-066",
+    "name": "Томь",
+    "lat": 56.4979,
+    "lon": 84.9409,
+    "date": "1902-09-11T02:30:00",
+    "group": "место преступления",
+    "order": 7,
+    "description": ""
+  },
+  {
+    "id": "g-068",
+    "name": "Общественное собрание",
+    "lat": 56.4773,
+    "lon": 84.9496,
+    "date": "1902-09-10T23:00:00",
+    "group": "заведения",
+    "order": 8,
+    "description": ""
+  },
+  {
+    "id": "g-078",
+    "name": "ростральные столбы",
+    "lat": 56.4878,
+    "lon": 84.9509,
+    "date": "1902-09-11T03:15:00",
+    "group": "улицы",
+    "order": 9,
+    "description": ""
+  },
+  {
+    "id": "g-079",
+    "name": "«Европа»",
+    "lat": 56.4843,
+    "lon": 84.9492,
+    "date": "1902-09-11T03:30:00",
+    "group": "заведения",
+    "order": 10,
+    "description": ""
+  },
+  {
+    "id": "g-080",
+    "name": "Магистратская улица /Розы Люксембург/",
+    "lat": 56.4922,
+    "lon": 84.951,
+    "date": "1902-09-11T04:30:00",
+    "group": "улицы",
+    "order": 11,
+    "description": ""
+  },
+  {
+    "id": "g-081",
+    "name": "Большеподгорная /Большая Подгорная/",
+    "lat": 56.4922,
+    "lon": 84.9527,
+    "date": "1902-09-11T04:45:00",
+    "group": "улицы",
+    "order": 12,
+    "description": ""
+  },
+  {
+    "id": "g-084",
+    "name": "Дальнеключевская",
+    "lat": 56.5038,
+    "lon": 84.9532,
+    "date": "1902-09-11T05:30:00",
+    "group": "улицы",
+    "order": 13,
+    "description": ""
+  },
+  {
+    "id": "g-085",
+    "name": "пивная Голубка",
+    "lat": 56.5023,
+    "lon": 84.9594,
+    "date": "1902-09-11T05:30:00",
+    "group": "трактир",
+    "order": 14,
+    "description": ""
+  },
+  {
+    "id": "g-091",
+    "name": "станция Межениновка /Томск-1/",
+    "lat": 56.4604,
+    "lon": 84.991,
+    "date": "1902-09-11T06:00:00",
+    "group": "заведения",
+    "order": 15,
+    "description": ""
+  },
+  {
+    "id": "g-095",
+    "name": "Савкин трактир",
+    "lat": 56.4642,
+    "lon": 84.9659,
+    "date": "1902-09-11T06:30:00",
+    "group": "трактир",
+    "order": 16,
+    "description": ""
+  },
+  {
+    "id": "g-104",
+    "name": "Савкин трактир",
+    "lat": 56.4642,
+    "lon": 84.9659,
+    "date": "1902-09-11T12:00:00",
+    "group": "трактир",
+    "order": 17,
+    "description": ""
+  },
+  {
+    "id": "g-105",
+    "name": "улица Бульварная",
+    "lat": 56.4666,
+    "lon": 84.9577,
+    "date": "1902-09-11T12:30:00",
+    "group": "улицы",
+    "order": 18,
+    "description": ""
+  },
+  {
+    "id": "g-107",
+    "name": "улица Большая Садовая",
+    "lat": 56.4669,
+    "lon": 84.9504,
+    "date": "1902-09-11T12:45:00",
+    "group": "улицы",
+    "order": 19,
+    "description": ""
+  },
+  {
+    "id": "g-117",
+    "name": "Дом Загорского",
+    "lat": 56.4707,
+    "lon": 84.9514,
+    "date": "1902-09-11T13:00:00",
+    "group": "квартиры",
+    "order": 20,
+    "description": ""
+  },
+  {
+    "id": "g-124",
+    "name": "пивная Голубка",
+    "lat": 56.5023,
+    "lon": 84.9594,
+    "date": "1902-09-11T09:00:00",
+    "group": "трактир",
+    "order": 21,
+    "description": ""
+  },
+  {
+    "id": "g-128",
+    "name": "«Белая харчевня и чайная\"",
+    "lat": 56.4887,
+    "lon": 84.9677,
+    "date": "1902-09-11T09:15:00",
+    "group": "трактир",
+    "order": 22,
+    "description": ""
+  },
+  {
+    "id": "g-129",
+    "name": "Белая харчевня и чайная",
+    "lat": 56.4887,
+    "lon": 84.9677,
+    "date": "1902-09-11T09:30:00",
+    "group": "трактир",
+    "order": 23,
+    "description": ""
+  },
+  {
+    "id": "g-132",
+    "name": "Думский мост",
+    "lat": 56.4879,
+    "lon": 84.9508,
+    "date": "1902-09-11T14:00:00",
+    "group": "улицы",
+    "order": 24,
+    "description": ""
+  },
+  {
+    "id": "g-140",
+    "name": "дом Егорина",
+    "lat": 56.4587,
+    "lon": 84.9505,
+    "date": "1902-09-11T14:30:00",
+    "group": "квартиры",
+    "order": 25,
+    "description": ""
+  },
+  {
+    "id": "g-146",
+    "name": "\"Россия\"",
+    "lat": 56.4764,
+    "lon": 84.9527,
+    "date": "1902-09-11T19:00:00",
+    "group": "заведения",
+    "order": 26,
+    "description": ""
+  },
+  {
+    "id": "g-168",
+    "name": "дом Загорского",
+    "lat": 56.4707,
+    "lon": 84.9516,
+    "date": "1902-09-18T18:00:00",
+    "group": "квартиры",
+    "order": 27,
+    "description": ""
+  },
+  {
+    "id": "g-175",
+    "name": "Аптекарский переулок",
+    "lat": 56.48431,
+    "lon": 84.95631,
+    "date": "1902-09-18T19:00:00",
+    "group": "улицы",
+    "order": 28,
+    "description": ""
+  },
+  {
+    "id": "g-176",
+    "name": "Никольская церковь",
+    "lat": 56.4819,
+    "lon": 84.9549,
+    "date": "1902-09-18T19:15:00",
+    "group": "церкви",
+    "order": 29,
+    "description": ""
+  },
+  {
+    "id": "g-177",
+    "name": "Аптекарский переулок",
+    "lat": 56.4844,
+    "lon": 84.9571,
+    "date": "1902-09-18T19:20:00",
+    "group": "место преступления",
+    "order": 30,
+    "description": ""
+  },
+  {
+    "id": "g-181",
+    "name": "Ушайка",
+    "lat": 56.4864,
+    "lon": 84.9618,
+    "date": "1902-09-18T19:25:00",
+    "group": "улицы",
+    "order": 31,
+    "description": ""
+  },
+  {
+    "id": "g-183",
+    "name": "улица Петропавловская",
+    "lat": 56.4844,
+    "lon": 84.9645,
+    "date": "1902-09-18T19:35:00",
+    "group": "улицы",
+    "order": 32,
+    "description": ""
+  },
+  {
+    "id": "g-184",
+    "name": "улица Тверская",
+    "lat": 56.4841,
+    "lon": 84.97049,
+    "date": "1902-09-18T19:45:00",
+    "group": "улицы",
+    "order": 33,
+    "description": ""
+  },
+  {
+    "id": "g-189",
+    "name": "дом Загорского",
+    "lat": 56.4706,
+    "lon": 84.951,
+    "date": "1902-09-18T20:15:00",
+    "group": "квартиры",
+    "order": 34,
+    "description": ""
+  },
+  {
+    "id": "g-198",
+    "name": "дом Егорина",
+    "lat": 56.4587,
+    "lon": 84.9505,
+    "date": "1902-09-13T09:00:00",
+    "group": "квартиры",
+    "order": 35,
+    "description": ""
+  },
+  {
+    "id": "g-204",
+    "name": "театр Королёва",
+    "lat": 56.4734,
+    "lon": 84.9468,
+    "date": "1902-09-13T20:00:00",
+    "group": "заведения",
+    "order": 36,
+    "description": ""
+  },
+  {
+    "id": "g-208",
+    "name": "дом",
+    "lat": 56.4707,
+    "lon": 84.9507,
+    "date": "1902-09-13T22:30:00",
+    "group": "притоны",
+    "order": 37,
+    "description": ""
+  },
+  {
+    "id": "g-211",
+    "name": "дом Загорского",
+    "lat": 56.4707,
+    "lon": 84.9512,
+    "date": "1902-09-18T20:30:00",
+    "group": "квартиры",
+    "order": 38,
+    "description": ""
+  },
+  {
+    "id": "g-212",
+    "name": "Никольская церковь",
+    "lat": 56.4819,
+    "lon": 84.9551,
+    "date": "1902-09-18T20:30:00",
+    "group": "церкви",
+    "order": 39,
+    "description": ""
+  },
+  {
+    "id": "g-213",
+    "name": "Московский тракт",
+    "lat": 56.4727,
+    "lon": 84.9443,
+    "date": "1902-09-13T23:45:00",
+    "group": "улицы",
+    "order": 40,
+    "description": ""
+  },
+  {
+    "id": "g-214",
+    "name": "пивная Голубка",
+    "lat": 56.5017,
+    "lon": 84.9605,
+    "date": "1902-09-14T00:30:00",
+    "group": "трактир",
+    "order": 41,
+    "description": ""
+  },
+  {
+    "id": "g-217",
+    "name": "дом Егорина",
+    "lat": 56.4587,
+    "lon": 84.9505,
+    "date": "1902-09-14T18:00:00",
+    "group": "квартиры",
+    "order": 42,
+    "description": ""
+  },
+  {
+    "id": "g-225",
+    "name": "Обруб",
+    "lat": 56.4882,
+    "lon": 84.9522,
+    "date": "1902-10-05T10:00:00",
+    "group": "улицы",
+    "order": 43,
+    "description": ""
+  },
+  {
+    "id": "g-226",
+    "name": "\"Меблированные комнаты для приезжающих\"",
+    "lat": 56.4878,
+    "lon": 84.9536,
+    "date": "1902-10-05T10:15:00",
+    "group": "притоны",
+    "order": 44,
+    "description": ""
+  },
+  {
+    "id": "g-241",
+    "name": "дом Загорского",
+    "lat": 56.4707,
+    "lon": 84.9516,
+    "date": "1902-09-25T14:00:00",
+    "group": "квартиры",
+    "order": 45,
+    "description": ""
+  },
+  {
+    "id": "g-243",
+    "name": "заимка разбойничья",
+    "lat": 56.4347,
+    "lon": 85.0277,
+    "date": "1902-09-25T16:00:00",
+    "group": "притоны",
+    "order": 46,
+    "description": ""
+  },
+  {
+    "id": "g-245",
+    "name": "заимка Ковригина",
+    "lat": 56.5765,
+    "lon": 85.0074,
+    "date": "1902-09-26T00:00:00",
+    "group": "место преступления",
+    "order": 47,
+    "description": ""
+  },
+  {
+    "id": "g-255",
+    "name": "дом Загорского",
+    "lat": 56.4706,
+    "lon": 84.9516,
+    "date": "1902-09-27T11:30:00",
+    "group": "квартиры",
+    "order": 48,
+    "description": ""
+  },
+  {
+    "id": "g-263",
+    "name": "«Европа»",
+    "lat": 56.4845,
+    "lon": 84.9496,
+    "date": "1902-09-27T12:00:00",
+    "group": "заведения",
+    "order": 49,
+    "description": ""
+  },
+  {
+    "id": "g-274",
+    "name": "меблированных комнат",
+    "lat": 56.4877,
+    "lon": 84.9537,
+    "date": "1902-09-27T13:30:00",
+    "group": "притоны",
+    "order": 50,
+    "description": ""
+  },
+  {
+    "id": "g-285",
+    "name": "штаб-квартира?",
+    "lat": 56.4576,
+    "lon": 84.9546,
+    "date": "1903-01-18T23:45:00",
+    "group": "притоны",
+    "order": 51,
+    "description": ""
+  },
+  {
+    "id": "g-287",
+    "name": "Иоанно-Предтеческого монастыря",
+    "lat": 56.4602,
+    "lon": 84.9608,
+    "date": "1903-01-19T00:00:00",
+    "group": "церкви",
+    "order": 52,
+    "description": ""
+  },
+  {
+    "id": "g-299",
+    "name": "улица Солдатская",
+    "lat": 56.4715,
+    "lon": 84.9654,
+    "date": "1903-01-19T00:25:00",
+    "group": "место преступления",
+    "order": 53,
+    "description": ""
+  },
+  {
+    "id": "g-305",
+    "name": "штаб-квартира",
+    "lat": 56.4576,
+    "lon": 84.9542,
+    "date": "1903-01-19T01:40:00",
+    "group": "притоны",
+    "order": 54,
+    "description": ""
+  },
+  {
+    "id": "g-307",
+    "name": "дом Козыря",
+    "lat": 56.5089,
+    "lon": 84.9494,
+    "date": "1903-01-19T18:00:00",
+    "group": "квартиры",
+    "order": 55,
+    "description": ""
+  },
+  {
+    "id": "g-319",
+    "name": "дом Егорина",
+    "lat": 56.4587,
+    "lon": 84.9504,
+    "date": "1903-01-22T18:00:00",
+    "group": "квартиры",
+    "order": 56,
+    "description": ""
+  },
+  {
+    "id": "g-322",
+    "name": "штаб-квартира",
+    "lat": 56.4577,
+    "lon": 84.9544,
+    "date": "1903-01-22T20:30:00",
+    "group": "притоны",
+    "order": 57,
+    "description": ""
+  },
+  {
+    "id": "g-326",
+    "name": "у Орлихи",
+    "lat": 56.4884,
+    "lon": 84.9616,
+    "date": "1903-01-25T03:00:00",
+    "group": "притоны",
+    "order": 58,
+    "description": ""
+  },
+  {
+    "id": "g-333",
+    "name": "дом Козыря",
+    "lat": 56.5091,
+    "lon": 84.9491,
+    "date": "1903-01-19T22:00:00",
+    "group": "место преступления",
+    "order": 59,
+    "description": ""
+  },
+  {
+    "id": "g-340",
+    "name": "конокрад",
+    "lat": 56.4764,
+    "lon": 84.9449,
+    "date": "1903-01-20T06:45:00",
+    "group": "скупщики",
+    "order": 60,
+    "description": ""
+  },
+  {
+    "id": "g-346",
+    "name": "дом Козыря",
+    "lat": 56.5089,
+    "lon": 84.949,
+    "date": "1903-01-20T05:30:00",
+    "group": "квартиры",
+    "order": 61,
+    "description": ""
+  },
+  {
+    "id": "g-348",
+    "name": "дом Загорского",
+    "lat": 56.4707,
+    "lon": 84.9516,
+    "date": "1903-01-28T18:00:00",
+    "group": "квартиры",
+    "order": 62,
+    "description": ""
+  },
+  {
+    "id": "g-352",
+    "name": "к Краверу",
+    "lat": 56.4912,
+    "lon": 84.9477,
+    "date": "1903-01-29T10:00:00",
+    "group": "квартиры",
+    "order": 63,
+    "description": ""
+  },
+  {
+    "id": "g-357",
+    "name": "дом Загорского",
+    "lat": 56.4707,
+    "lon": 84.9516,
+    "date": "1903-01-29T19:00:00",
+    "group": "квартиры",
+    "order": 64,
+    "description": ""
+  },
+  {
+    "id": "g-358",
+    "name": "театр Королёва",
+    "lat": 56.4735,
+    "lon": 84.9472,
+    "date": "1903-01-29T20:30:00",
+    "group": "заведения",
+    "order": 65,
+    "description": ""
+  },
+  {
+    "id": "g-360",
+    "name": "дом Егорина",
+    "lat": 56.4587,
+    "lon": 84.9505,
+    "date": "1903-04-12T11:00:00",
+    "group": "квартиры",
+    "order": 66,
+    "description": ""
+  },
+  {
+    "id": "g-364",
+    "name": "улица Большая",
+    "lat": 56.4857,
+    "lon": 84.9486,
+    "date": "1903-07-15T22:30:00",
+    "group": "улицы",
+    "order": 67,
+    "description": ""
+  },
+  {
+    "id": "g-367",
+    "name": "пристань",
+    "lat": 56.4883,
+    "lon": 84.9442,
+    "date": "1903-07-15T23:00:00",
+    "group": "заведения",
+    "order": 68,
+    "description": ""
+  },
+  {
+    "id": "g-368",
+    "name": "Базарная площадь",
+    "lat": 56.4868,
+    "lon": 84.9476,
+    "date": "1903-07-15T23:30:00",
+    "group": "улицы",
+    "order": 69,
+    "description": ""
+  },
+  {
+    "id": "g-377",
+    "name": "улица Большая",
+    "lat": 56.4841,
+    "lon": 84.9489,
+    "date": "1903-07-15T23:45:00",
+    "group": "улицы",
+    "order": 70,
+    "description": ""
+  },
+  {
+    "id": "g-379",
+    "name": "переулок Ямской",
+    "lat": 56.483,
+    "lon": 84.949,
+    "date": "1903-07-15T23:55:00",
+    "group": "улицы",
+    "order": 71,
+    "description": ""
+  },
+  {
+    "id": "g-386",
+    "name": "Общественное собрание",
+    "lat": 56.4774,
+    "lon": 84.9496,
+    "date": "1903-07-16T00:15:00",
+    "group": "заведения",
+    "order": 72,
+    "description": ""
+  },
+  {
+    "id": "g-387",
+    "name": "флигель",
+    "lat": 56.478,
+    "lon": 84.9506,
+    "date": "1903-07-16T00:40:00",
+    "group": "место преступления",
+    "order": 73,
+    "description": ""
+  },
+  {
+    "id": "g-390",
+    "name": "Общественное собрание",
+    "lat": 56.4775,
+    "lon": 84.9496,
+    "date": "1903-07-16T01:30:00",
+    "group": "заведения",
+    "order": 74,
+    "description": ""
+  },
+  {
+    "id": "g-396",
+    "name": "Театральный переулок",
+    "lat": 56.4733,
+    "lon": 84.9478,
+    "date": "1903-07-16T02:15:00",
+    "group": "улицы",
+    "order": 75,
+    "description": ""
+  },
+  {
+    "id": "g-399",
+    "name": "Московский тракт",
+    "lat": 56.4697,
+    "lon": 84.9413,
+    "date": "1903-07-16T02:45:00",
+    "group": "улицы",
+    "order": 76,
+    "description": ""
+  },
+  {
+    "id": "g-401",
+    "name": "дом Егорина",
+    "lat": 56.4587,
+    "lon": 84.9505,
+    "date": "1903-07-16T03:15:00",
+    "group": "квартиры",
+    "order": 77,
+    "description": ""
+  },
+  {
+    "id": "g-402",
+    "name": "улица Симоновская",
+    "lat": 56.459,
+    "lon": 84.9421,
+    "date": "1903-07-16T03:30:00",
+    "group": "улицы",
+    "order": 78,
+    "description": ""
+  },
+  {
+    "id": "g-404",
+    "name": "Томь",
+    "lat": 56.4582,
+    "lon": 84.934,
+    "date": "1903-07-16T03:45:00",
+    "group": "место преступления",
+    "order": 79,
+    "description": ""
+  },
+  {
+    "id": "g-408",
+    "name": "дом Егорина",
+    "lat": 56.4585,
+    "lon": 84.9505,
+    "date": "1903-07-16T08:00:00",
+    "group": "квартиры",
+    "order": 80,
+    "description": ""
+  },
+  {
+    "id": "g-409",
+    "name": "Исток",
+    "lat": 56.4773,
+    "lon": 84.9426,
+    "date": "1903-07-16T09:30:00",
+    "group": "скупщики",
+    "order": 81,
+    "description": ""
+  },
+  {
+    "id": "g-410",
+    "name": "Правая сторона Томи",
+    "lat": 56.4558,
+    "lon": 84.9215,
+    "date": "1903-07-16T12:00:00",
+    "group": "улицы",
+    "order": 82,
+    "description": ""
+  },
+  {
+    "id": "g-428",
+    "name": "Кочеровские дома",
+    "lat": 56.4781,
+    "lon": 84.9549,
+    "date": "1903-08-20T10:00:00",
+    "group": "квартиры",
+    "order": 83,
+    "description": ""
+  },
+  {
+    "id": "g-432",
+    "name": "ипподром",
+    "lat": 56.4649,
+    "lon": 84.9749,
+    "date": "1903-08-20T12:30:00",
+    "group": "заведения",
+    "order": 84,
+    "description": ""
+  },
+  {
+    "id": "g-442",
+    "name": "воротам Кати",
+    "lat": 56.4783,
+    "lon": 84.9549,
+    "date": "1903-11-15T19:00:00",
+    "group": "квартиры",
+    "order": 85,
+    "description": ""
+  },
+  {
+    "id": "g-447",
+    "name": "Общественное собрание",
+    "lat": 56.4775,
+    "lon": 84.9496,
+    "date": "1904-03-04T20:00:00",
+    "group": "заведения",
+    "order": 86,
+    "description": ""
+  },
+  {
+    "id": "g-449",
+    "name": "\"Россия\"",
+    "lat": 56.4766,
+    "lon": 84.9527,
+    "date": "1904-03-04T23:00:00",
+    "group": "заведения",
+    "order": 87,
+    "description": ""
+  },
+  {
+    "id": "g-455",
+    "name": "трактир Чебукидзе",
+    "lat": 56.4792,
+    "lon": 84.9535,
+    "date": "1904-03-28T22:00:00",
+    "group": "трактир",
+    "order": 88,
+    "description": ""
+  },
+  {
+    "id": "g-476",
+    "name": "дом Кочерова",
+    "lat": 56.4685,
+    "lon": 84.9691,
+    "date": "1904-04-12T08:00:00",
+    "group": "квартиры",
+    "order": 89,
+    "description": ""
+  },
+  {
+    "id": "g-480",
+    "name": "на углу Никитской",
+    "lat": 56.4777,
+    "lon": 84.9558,
+    "date": "1904-04-12T08:30:00",
+    "group": "улицы",
+    "order": 90,
+    "description": ""
+  },
+  {
+    "id": "g-482",
+    "name": "трактиру Чебукидзе",
+    "lat": 56.4792,
+    "lon": 84.9535,
+    "date": "1904-04-12T08:45:00",
+    "group": "трактир",
+    "order": 91,
+    "description": ""
+  },
+  {
+    "id": "g-485",
+    "name": "Обруб",
+    "lat": 56.4878,
+    "lon": 84.9532,
+    "date": "1904-04-12T09:00:00",
+    "group": "улицы",
+    "order": 92,
+    "description": ""
+  },
+  {
+    "id": "g-487",
+    "name": "Воскресенская гора",
+    "lat": 56.4888,
+    "lon": 84.9529,
+    "date": "1904-04-12T09:05:00",
+    "group": "улицы",
+    "order": 93,
+    "description": ""
+  },
+  {
+    "id": "g-488",
+    "name": "улица Большая",
+    "lat": 56.4851,
+    "lon": 84.9486,
+    "date": "1904-04-12T09:10:00",
+    "group": "улицы",
+    "order": 94,
+    "description": ""
+  },
+  {
+    "id": "g-490",
+    "name": "магазина Щепкина и Сковородина",
+    "lat": 56.4837,
+    "lon": 84.9484,
+    "date": "1904-04-12T09:12:00",
+    "group": "заведения",
+    "order": 95,
+    "description": ""
+  },
+  {
+    "id": "g-493",
+    "name": "главная касса Сибирской железной дороги",
+    "lat": 56.4835,
+    "lon": 84.9491,
+    "date": "1904-04-12T09:15:00",
+    "group": "заведения",
+    "order": 96,
+    "description": "???"
+  },
+  {
+    "id": "g-494",
+    "name": "во двор банка",
+    "lat": 56.4832,
+    "lon": 84.9501,
+    "date": "1904-04-12T09:16:00",
+    "group": "место преступления",
+    "order": 97,
+    "description": ""
+  },
+  {
+    "id": "g-496",
+    "name": "переулок Ямской",
+    "lat": 56.4829,
+    "lon": 84.9491,
+    "date": "1904-04-12T09:20:00",
+    "group": "улицы",
+    "order": 98,
+    "description": ""
+  },
+  {
+    "id": "g-498",
+    "name": "улица Большая",
+    "lat": 56.4864,
+    "lon": 84.9485,
+    "date": "1904-04-12T09:25:00",
+    "group": "улицы",
+    "order": 99,
+    "description": ""
+  },
+  {
+    "id": "g-506",
+    "name": "Томский вокзал",
+    "lat": 56.5066,
+    "lon": 84.9979,
+    "date": "1904-04-12T09:00:00",
+    "group": "заведения",
+    "order": 100,
+    "description": ""
+  },
+  {
+    "id": "g-507",
+    "name": "улица Вокзальная",
+    "lat": 56.5048,
+    "lon": 84.9929,
+    "date": "1904-04-12T09:15:00",
+    "group": "улицы",
+    "order": 101,
+    "description": ""
+  },
+  {
+    "id": "g-510",
+    "name": "Воскресенская церковь",
+    "lat": 56.499,
+    "lon": 84.9676,
+    "date": "1904-04-12T09:30:00",
+    "group": "церкви",
+    "order": 102,
+    "description": ""
+  },
+  {
+    "id": "g-513",
+    "name": "Томская пересыльная тюрьма",
+    "lat": 56.5013,
+    "lon": 84.979,
+    "date": "1904-04-12T09:35:00",
+    "group": "заведения",
+    "order": 103,
+    "description": ""
+  },
+  {
+    "id": "g-514",
+    "name": "Воскресенского кладбища",
+    "lat": 56.5007,
+    "lon": 84.9739,
+    "date": "1904-04-12T10:05:00",
+    "group": "место преступления",
+    "order": 104,
+    "description": ""
+  },
+  {
+    "id": "g-515",
+    "name": "улица Кустарная",
+    "lat": 56.4977,
+    "lon": 84.973,
+    "date": "1904-04-12T10:20:00",
+    "group": "улицы",
+    "order": 105,
+    "description": ""
+  },
+  {
+    "id": "g-519",
+    "name": "у Орлихи",
+    "lat": 56.4882,
+    "lon": 84.9615,
+    "date": "1904-04-12T10:45:00",
+    "group": "притоны",
+    "order": 106,
+    "description": ""
+  },
+  {
+    "id": "g-524",
+    "name": "в углу каретника",
+    "lat": 56.4874,
+    "lon": 84.9594,
+    "date": "1904-04-12T11:15:00",
+    "group": "квартиры",
+    "order": 107,
+    "description": ""
+  },
+  {
+    "id": "g-525",
+    "name": "дом Кочерова",
+    "lat": 56.4685,
+    "lon": 84.9691,
+    "date": "1904-04-12T11:45:00",
+    "group": "квартиры",
+    "order": 108,
+    "description": ""
+  },
+  {
+    "id": "g-527",
+    "name": "пивная Голубка",
+    "lat": 56.5023,
+    "lon": 84.9594,
+    "date": "1904-04-12T12:30:00",
+    "group": "трактир",
+    "order": 109,
+    "description": ""
+  },
+  {
+    "id": "g-535",
+    "name": "«Европа»",
+    "lat": 56.4844,
+    "lon": 84.9494,
+    "date": "1904-04-14T20:00:00",
+    "group": "заведения",
+    "order": 110,
+    "description": ""
+  },
+  {
+    "id": "g-548",
+    "name": "улица Большая",
+    "lat": 56.49,
+    "lon": 84.9481,
+    "date": "1904-04-14T22:15:00",
+    "group": "улицы",
+    "order": 111,
+    "description": ""
+  },
+  {
+    "id": "g-550",
+    "name": "Вокзальная слободка",
+    "lat": 56.5036,
+    "lon": 85.0024,
+    "date": "1904-04-14T22:30:00",
+    "group": "улицы",
+    "order": 112,
+    "description": ""
+  },
+  {
+    "id": "g-551",
+    "name": "у Асана",
+    "lat": 56.5069,
+    "lon": 85.0016,
+    "date": "1904-04-14T22:40:00",
+    "group": "квартиры",
+    "order": 113,
+    "description": ""
+  },
+  {
+    "id": "g-552",
+    "name": "полицейский участок",
+    "lat": 56.4885,
+    "lon": 84.9554,
+    "date": "1904-04-14T23:00:00",
+    "group": "заведения",
+    "order": 114,
+    "description": ""
+  },
+  {
+    "id": "g-558",
+    "name": "у Асана",
+    "lat": 56.5071,
+    "lon": 85.0016,
+    "date": "1904-04-15T04:30:00",
+    "group": "квартиры",
+    "order": 115,
+    "description": ""
+  },
+  {
+    "id": "g-561",
+    "name": "пивная Голубка",
+    "lat": 56.5023,
+    "lon": 84.9594,
+    "date": "1904-04-15T05:00:00",
+    "group": "трактир",
+    "order": 116,
+    "description": ""
+  },
+  {
+    "id": "g-565",
+    "name": "Томская пересыльная тюрьма",
+    "lat": 56.5018,
+    "lon": 84.9791,
+    "date": "1904-05-15T10:00:00",
+    "group": "заведения",
+    "order": 117,
+    "description": ""
+  },
+  {
+    "id": "g-568",
+    "name": "Окружной суд в Томске",
+    "lat": 56.4764,
+    "lon": 84.9546,
+    "date": "1904-12-05T10:00:00",
+    "group": "заведения",
+    "order": 118,
+    "description": ""
+  }
+];
+
+
+// === STATE ===
+var map = null;
+var markers = [];
+var lines = [];
+var renderedIds = new Set();
+var steps = [];
+var currentStep = 0;
+var isPlaying = false;
+var playTimer = null;
+var isDragging = false;
+var baseZoom = null,
+currentMode = 'event';
+
+// === COLORS ===
+var groupColors = {
+  'города': '#e94560', 'реки': '#5dade2', 'горы': '#27ae60',
+  'гостиницы': '#f39c12', 'станции': '#9b59b6', 'default': '#5dade2'
+};
+function getColor(group) {
+  if (groupColors[group]) return groupColors[group];
+  var hue = (group.split('').reduce(function(a,b){return a+b.charCodeAt(0)},0) * 137) % 360;
+  groupColors[group] = 'hsl('+hue+',70%,60%)';
+  return groupColors[group];
+}
+
+// === DATE UTILS ===
+function parseDate(s) {
+  if (!s) return null;
+  if (/^\d{4}$/.test(s)) return new Date(parseInt(s),0,1);
+  if (/^\d{4}-\d{2}$/.test(s)) return new Date(s+'-01');
+  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return new Date(s+'T00:00:00');
+  var d = new Date(s);
+  return isNaN(d.getTime()) ? null : d;
+}
+function formatDate(d) {
+  if (!d) return '—';
+  var dd = String(d.getDate()).padStart(2,'0');
+  var mm = String(d.getMonth()+1).padStart(2,'0');
+  var yyyy = d.getFullYear();
+  var hh = String(d.getHours()).padStart(2,'0');
+  var mi = String(d.getMinutes()).padStart(2,'0');
+  if (hh==='00' && mi==='00') return dd+'.'+mm+'.'+yyyy;
+  return dd+'.'+mm+'.'+yyyy+' '+hh+':'+mi;
+}
+function formatTickLabel(d, rangeYears) {
+  if (rangeYears < 1) return d.toLocaleDateString('ru-RU',{day:'numeric',month:'short'});
+  if (rangeYears < 10) return d.toLocaleDateString('ru-RU',{year:'numeric',month:'short'});
+  return String(d.getFullYear());
+}
+
+// === INIT MAP ===
+function initMap() {
+  if (map) return;
+  map = L.map('map', {
+    minZoom: 1,
+    maxZoom: 14,
+    attributionControl: false
+  }).setView([55,80], 4);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+    attribution: '', subdomains: 'abcd', maxZoom: 14
+  }).addTo(map);
+  map.on('moveend', function(){
+    // можно обновлять координаты центра, если нужно
+  });
+}
+
+// === BUILD ===
+function build() {
+  initMap();
+  resetMap();
+  renderedIds.clear();
+  steps = [];
+  currentStep = 0;
+
+  var mode = document.getElementById('mode-select').value;
+  var dated = DATA.filter(function(p){return p.date}).map(function(p){
+    return Object.assign({},p,{parsedDate:parseDate(p.date)});
+  }).filter(function(p){return p.parsedDate});
+  var undated = DATA.filter(function(p){return !p.date});
+
+  if (mode === 'event') {
+    var sorted = dated.sort(function(a,b){return a.parsedDate-b.parsedDate})
+      .concat(undated.sort(function(a,b){return (a.order||0)-(b.order||0)}));
+    for (var i=1;i<=sorted.length;i++) steps.push(i/sorted.length);
+  } else {
+    for (var i=0;i<=40;i++) steps.push(i/40);
+  }
+
+  // Fit bounds
+  var pts = DATA.filter(function(p){return p.lat&&p.lon});
+  if (pts.length > 0) {
+    var bounds = pts.map(function(p){return [p.lat,p.lon]});
+    map.fitBounds(bounds,{padding:[50,50]});
+    baseZoom = map.getZoom();
+  }
+
+  // Timeline
+  buildTimeline(dated);
+  // Table
+  renderTable();
+  // Legend
+  buildLegend();
+  // Initial render
+  renderAtProgress(0, true);
+
+  document.getElementById('play-btn').disabled = false;
+}
+
+// === RENDER AT PROGRESS ===
+function renderAtProgress(progress, forceFull, centerMode) {
+  progress = Math.max(0,Math.min(1,progress));
+  var mode = document.getElementById('mode-select').value;
+  var visible = getVisible(progress, mode);
+  var fresh = visible.filter(function(p){return !renderedIds.has(p.id)});
+
+  if (forceFull) {
+    resetMap();
+    renderedIds.clear();
+    visible.forEach(function(p){addPoint(p,false)});
+    addLines(visible);
+    if (visible.length>0) {
+      if (centerMode === 'keep') {
+        // Вид камеры не трогаем — только перерисовываем точки
+      } else if (centerMode === 'pan') {
+        panToCurrentPoint(visible, mode);
+      } else {
+        centerOnAll(visible);
+      }
+    }
+  } else if (fresh.length > 0) {
+    fresh.forEach(function(p){addPoint(p,true)});
+    addLines(visible);
+    var prev = visible.length-fresh.length-1 >= 0 ? visible[visible.length-fresh.length-1] : null;
+    var curr = fresh[fresh.length-1];
+    centerOnPoints(prev, curr);
+  }
+
+  visible.forEach(function(p){renderedIds.add(p.id)});
+  updateTimelineUI(progress, visible, mode);
+}
+
+function getVisible(progress, mode) {
+  var dated = DATA.filter(function(p){return p.date}).map(function(p){
+    return Object.assign({},p,{parsedDate:parseDate(p.date)});
+  }).filter(function(p){return p.parsedDate});
+  var undated = DATA.filter(function(p){return !p.date});
+
+  if (mode === 'event') {
+    var sorted = dated.sort(function(a,b){return a.parsedDate-b.parsedDate})
+      .concat(undated.sort(function(a,b){return (a.order||0)-(b.order||0)}));
+    var count = Math.max(1,Math.round(progress*sorted.length));
+    return sorted.slice(0,count);
+  }
+  // time mode
+  if (dated.length===0) return [];
+  var minD = new Date(Math.min.apply(null,dated.map(function(p){return p.parsedDate})));
+  var maxD = new Date(Math.max.apply(null,dated.map(function(p){return p.parsedDate})));
+  var range = maxD-minD;
+  var curDate = new Date(minD.getTime()+range*progress);
+  var vis = dated.filter(function(p){return p.parsedDate<=curDate});
+  if (progress>=0.999) vis = vis.concat(undated);
+  return vis;
+}
+
+// === POINTS & LINES ===
+function addPoint(point, isFresh) {
+  var color = getColor(point.group||'default');
+  var cls = 'marker-icon'+(isFresh?' marker-fresh':'');
+  var m = L.marker([point.lat,point.lon],{
+    icon: L.divIcon({
+      html:'<div class="'+cls+'" style="background:'+color+';width:24px;height:24px;">'+(point.order||'')+'</div>',
+      iconSize:[24,24], iconAnchor:[12,12], popupAnchor:[0,-14], className:''
+    })
+  }).addTo(map);
+  var popup = '<b>'+(point.order||'')+'. '+point.name+'</b>';
+  if (point.date) popup += '<br>📅 '+formatDate(parseDate(point.date));
+  if (point.description) popup += '<br>'+point.description;
+  m.bindPopup(popup,{closeButton:false});
+  if (isFresh) m.openPopup();
+  m._pid = point.id;
+  markers.push(m);
+}
+
+function addLines(points) {
+  var dated = points.filter(function(p){return p.date}).sort(function(a,b){
+    if (a.parsedDate && b.parsedDate && a.parsedDate.getTime() !== b.parsedDate.getTime()) return a.parsedDate - b.parsedDate;
+    return (a.order||0)-(b.order||0);
+  });
+  if (dated.length<2) return;
+  for (var i=1;i<dated.length;i++) {
+    var key = dated[i-1].id+'-'+dated[i].id;
+    if (renderedIds.has('line-'+key)) continue;
+    var line = L.polyline(
+      [[dated[i-1].lat,dated[i-1].lon],[dated[i].lat,dated[i].lon]],
+      {color:'#e94560',weight:2.5,opacity:0.7,dashArray:'10,8'}
+    ).addTo(map);
+    lines.push(line);
+    renderedIds.add('line-'+key);
+  }
+}
+
+function resetMap() {
+  markers.forEach(function(m){map.removeLayer(m)});
+  lines.forEach(function(l){map.removeLayer(l)});
+  markers=[]; lines=[];
+}
+
+// === CENTERING (SMART ZOOM) ===
+function centerOnPoints(prev, curr) {
+  if (!curr||!map) return;
+  var target = L.latLng(curr.lat,curr.lon);
+  if (map.getBounds().contains(target)) return;
+  var maxZ = baseZoom!==null ? Math.min(baseZoom+3,18) : 16;
+  if (map.getZoom()>maxZ) map.setZoom(maxZ,{animate:true});
+  map.panTo(target,{animate:true,duration:0.8});
+}
+function centerOnAll(pts) {
+  if (!pts||pts.length===0) return;
+  var bounds = pts.map(function(p){return [p.lat,p.lon]});
+  map.fitBounds(bounds,{padding:[50,50],duration:0.8});
+  baseZoom = map.getZoom();
+}
+
+function panToCurrentPoint(visible, mode) {
+  if (!visible || visible.length === 0 || !map) return;
+  // Цель: События — последняя видимая точка, Время — самая свежая по дате
+  var target;
+  if (mode === 'event') {
+    target = visible[visible.length - 1];
+  } else {
+    target = null;
+    for (var i = 0; i < visible.length; i++) {
+      var p = visible[i];
+      if (p.parsedDate && (!target || p.parsedDate > target.parsedDate)) {
+        target = p;
+      }
+    }
+    if (!target) target = visible[visible.length - 1];
+  }
+  if (!target || !target.lat || !target.lon) return;
+  var m = markers.find(function(mk) { return mk._pid === target.id; });
+  var targetLL = L.latLng(target.lat, target.lon);
+  // Уже на месте — просто открываем попап
+  if (map.getCenter().distanceTo(targetLL) < 1) {
+    if (m) m.openPopup();
+    return;
+  }
+  // Пан без смены зума, попап — по прибытии
+  map.once('moveend', function() {
+    if (m && m._map) m.openPopup();
+  });
+  map.panTo(targetLL, {animate: true, duration: 0.5});
+}
+
+function getCurrentAnchorPoint(visible, mode) {
+  if (!visible || visible.length === 0) return null;
+  if (mode === 'event') {
+    return visible[visible.length - 1];
+  }
+  // Время: самая свежая по дате
+  var best = null;
+  for (var i = 0; i < visible.length; i++) {
+    var p = visible[i];
+    if (p.parsedDate && (!best || p.parsedDate > best.parsedDate)) {
+      best = p;
+    }
+  }
+  return best || visible[visible.length - 1];
+}
+function findProgressByPointId(pointId, mode) {
+  var dated = DATA.filter(function(p){return p.date}).map(function(p){
+    return Object.assign({},p,{parsedDate:parseDate(p.date)});
+  }).filter(function(p){return p.parsedDate});
+  var undated = DATA.filter(function(p){return !p.date});
+  var all = dated.sort(function(a,b){return a.parsedDate-b.parsedDate})
+    .concat(undated.sort(function(a,b){return (a.order||0)-(b.order||0)}));
+  if (all.length === 0) return { progress: 0, stepIndex: 0 };
+  var idx = -1;
+  for (var i = 0; i < all.length; i++) {
+    if (all[i].id === pointId) { idx = i; break; }
+  }
+  if (idx === -1) idx = all.length - 1;
+  if (mode === 'event') {
+    return { progress: (idx + 1) / all.length, stepIndex: idx };
+  } else {
+    var point = all[idx];
+    var pos;
+    if (point.parsedDate && dated.length > 0) {
+      var dates = dated.map(function(p){return p.parsedDate});
+      var minD = new Date(Math.min.apply(null,dates));
+      var maxD = new Date(Math.max.apply(null,dates));
+      var range = maxD - minD;
+      pos = range === 0 ? 0 : (point.parsedDate - minD) / range;
+    } else {
+      pos = 1;
+    }
+    return { progress: pos, stepIndex: Math.max(0, Math.min(40, Math.round(pos * 40))) };
+  }
+}
+
+// === TIMELINE ===
+function buildTimeline(dated) {
+  var ticksEl = document.getElementById('tl-ticks');
+  var eventsEl = document.getElementById('tl-events');
+  ticksEl.innerHTML=''; eventsEl.innerHTML='';
+  if (dated.length===0) return;
+
+  var dates = dated.map(function(p){return p.parsedDate});
+  var minD = new Date(Math.min.apply(null,dates));
+  var maxD = new Date(Math.max.apply(null,dates));
+  var rangeYears = (maxD-minD)/(1000*60*60*24*365);
+
+  // Ticks
+  for (var i=0;i<=10;i++) {
+    var prog = i/10;
+    var d = new Date(minD.getTime()+(maxD-minD)*prog);
+    var el = document.createElement('div');
+    el.className='tick'; el.style.left=(prog*100)+'%';
+    el.innerHTML='<div class="tick-line"></div><div class="tick-label">'+formatTickLabel(d,rangeYears)+'</div>';
+    ticksEl.appendChild(el);
+  }
+
+  // Events
+  dated.forEach(function(p){
+    var prog = (p.parsedDate-minD)/(maxD-minD||1);
+    var dot = document.createElement('div');
+    dot.className='event-dot'; dot.style.left=(prog*100)+'%';
+    dot.title=(p.order||'')+'. '+p.name+' — '+formatDate(p.parsedDate);
+    dot.onclick=function(e){
+      e.stopPropagation();
+      if (isPlaying) pause();
+      goToProgress(prog);
+    };
+    eventsEl.appendChild(dot);
+  });
+
+  document.getElementById('tl-range').textContent=formatDate(minD)+' — '+formatDate(maxD);
+}
+
+function updateTimelineUI(progress, visible, mode) {
+  var vp = progress;
+  if (mode==='event' && visible.length>0) {
+    var last = visible[visible.length-1];
+    if (last.date) {
+      var dated = DATA.filter(function(p){return p.date}).map(function(p){
+        return Object.assign({},p,{parsedDate:parseDate(p.date)});
+      }).filter(function(p){return p.parsedDate});
+      if (dated.length>0) {
+        var minD=new Date(Math.min.apply(null,dated.map(function(p){return p.parsedDate})));
+        var maxD=new Date(Math.max.apply(null,dated.map(function(p){return p.parsedDate})));
+        vp = (last.parsedDate-minD)/(maxD-minD||1);
+      }
+    }
+  }
+  document.getElementById('tl-fill').style.width=(vp*100)+'%';
+  document.getElementById('tl-thumb').style.left=(vp*100)+'%';
+
+  // Date display
+  var dated = DATA.filter(function(p){return p.date}).map(function(p){
+    return Object.assign({},p,{parsedDate:parseDate(p.date)});
+  }).filter(function(p){return p.parsedDate});
+  if (dated.length>0) {
+    var minD=new Date(Math.min.apply(null,dated.map(function(p){return p.parsedDate})));
+    var maxD=new Date(Math.max.apply(null,dated.map(function(p){return p.parsedDate})));
+    var curDate=new Date(minD.getTime()+(maxD-minD)*progress);
+    document.getElementById('tl-date').textContent=formatDate(curDate);
+  }
+
+  // Highlight event dots
+  document.querySelectorAll('.event-dot').forEach(function(el){
+    var ep=parseFloat(el.style.left)/100;
+    el.classList.toggle('active',ep<=vp);
+  });
+}
+
+// === TABLE ===
+function renderTable() {
+  var tbody = document.getElementById('table-body');
+  tbody.innerHTML = DATA.map(function(p,i){
+    var dateStr = p.date ? formatDate(parseDate(p.date)) : '';
+    return '<tr data-id="'+p.id+'" onclick="onRowClick(\''+p.id+'\')">' +
+      '<td>'+(p.order||i+1)+'</td>' +
+      '<td>'+p.name+'</td>' +
+      '<td>'+dateStr+'</td>' +
+      '<td>'+(p.description||'')+'</td></tr>';
+  }).join('');
+}
+function highlightRow(id) {
+  document.querySelectorAll('#table-body tr').forEach(function(tr){
+    tr.classList.toggle('active',tr.dataset.id===id);
+  });
+}
+function onRowClick(id) {
+  var p = DATA.find(function(x){return x.id===id});
+  if (p && p.lat && p.lon) {
+    map.panTo([p.lat,p.lon]);
+    var m = markers.find(function(mk){
+      var ll=mk.getLatLng();
+      return Math.abs(ll.lat-p.lat)<0.001 && Math.abs(ll.lng-p.lon)<0.001;
+    });
+    if (m) m.openPopup();
+  }
+  highlightRow(id);
+}
+
+// === LEGEND ===
+function buildLegend() {
+  var groups = {};
+  DATA.forEach(function(p){if(p.group)groups[p.group]=true});
+  var keys = Object.keys(groups);
+  var el = document.getElementById('legend');
+  if (keys.length<=1){el.style.display='none';return;}
+  el.innerHTML='<div style="font-weight:bold;margin-bottom:6px;color:var(--va-accent)">Группы</div>';
+  keys.forEach(function(g){
+    el.innerHTML+='<div class="legend-item"><div class="legend-dot" style="background:'+getColor(g)+'"></div><span>'+g+'</span></div>';
+  });
+  el.style.display='block';
+}
+
+// === PLAYBACK ===
+function startPlay() {
+  if (isPlaying||steps.length===0) return;
+  isPlaying=true;
+  document.getElementById('play-btn').textContent='⏸ Пауза';
+  tick();
+}
+function pause() {
+  isPlaying=false;
+  clearTimeout(playTimer);
+  document.getElementById('play-btn').textContent='▶ Дальше';
+}
+function stop() {
+  isPlaying=false;
+  clearTimeout(playTimer);
+  document.getElementById('play-btn').textContent='▶ Играть';
+}
+function togglePlay() {
+  if (isPlaying) pause(); else startPlay();
+}
+function tick() {
+  if (!isPlaying) return;
+  var progress = steps[Math.min(currentStep,steps.length-1)];
+  renderAtProgress(progress,false);
+  highlightActiveRow(progress);
+  currentStep++;
+  if (currentStep>=steps.length){stop();return;}
+  var delay = parseFloat(document.getElementById('speed-input').value)*1000||2000;
+  var mode = document.getElementById('mode-select').value;
+  if (mode === 'time') delay = delay;
+  playTimer = setTimeout(tick,delay);
+}
+function highlightActiveRow(progress) {
+  var mode = document.getElementById('mode-select').value;
+  var visible = getVisible(progress,mode);
+  if (visible.length>0) highlightRow(visible[visible.length-1].id);
+}
+function resetAll() {
+  stop();
+  resetMap();
+  renderedIds.clear();
+  currentStep=0;
+  document.getElementById('tl-fill').style.width='0%';
+  document.getElementById('tl-thumb').style.left='0%';
+  document.getElementById('tl-date').textContent='—';
+  renderAtProgress(0,true);
+}
+
+function goToProgress(progress) {
+  var mode = document.getElementById('mode-select').value;
+  // Датированные точки с распарсенными датами
+  var dated = DATA.filter(function(p){return p.date}).map(function(p){
+    return Object.assign({},p,{parsedDate:parseDate(p.date)});
+  }).filter(function(p){return p.parsedDate});
+  var undated = DATA.filter(function(p){return !p.date});
+  // Порядок как в режиме События: датированные по хронологии, затем бездатные по order
+  var all = dated.sort(function(a,b){return a.parsedDate-b.parsedDate})
+    .concat(undated.sort(function(a,b){return (a.order||0)-(b.order||0)}));
+  if (all.length === 0) {
+    renderAtProgress(0, true);
+    return;
+  }
+  // Диапазон дат: перевод даты в позицию на шкале
+  var dates = dated.map(function(p){return p.parsedDate});
+  var minD = dates.length ? new Date(Math.min.apply(null,dates)) : null;
+  var maxD = dates.length ? new Date(Math.max.apply(null,dates)) : null;
+  function datePos(p) {
+    if (!p.parsedDate || !minD || !maxD) return 1;
+    var range = maxD - minD;
+    return range === 0 ? 0 : (p.parsedDate - minD) / range;
+  }
+  // Ближайший кандидат: точки (по дате), во Времени добавляются четверть-шаги i/40
+  var best = null, minDiff = Infinity;
+  all.forEach(function(p, idx){
+    var d = Math.abs(datePos(p) - progress);
+    if (d < minDiff) { minDiff = d; best = { pos: datePos(p), index: idx }; }
+  });
+  if (mode === 'time') {
+    for (var i = 0; i <= 40; i++) {
+      var d2 = Math.abs(i/40 - progress);
+      if (d2 < minDiff) { minDiff = d2; best = { pos: i/40, index: -1 }; }
+    }
+  }
+  if (mode === 'event') {
+    // События: сажаем на точку, шаг = индекс этой точки
+    currentStep = best.index;
+    var stepProgress = (best.index + 1) / all.length;
+    renderAtProgress(stepProgress, true, 'pan');
+    highlightActiveRow(stepProgress);
+  } else {
+    // Время: сажаем на ближайшую позицию (точка или четверть-тик)
+    renderAtProgress(best.pos, true, 'pan');
+    currentStep = Math.max(0, Math.min(40, Math.round(best.pos * 40)));
+    highlightActiveRow(best.pos);
+  }
+}
+
+// === TIMELINE DRAG ===
+document.getElementById('tl-thumb').addEventListener('mousedown',function(e){
+  isDragging=true;
+  if(isPlaying)pause();
+  e.preventDefault();
+});
+document.addEventListener('mousemove',function(e){
+  if(!isDragging)return;
+  var track=document.getElementById('tl-track');
+  var rect=track.getBoundingClientRect();
+  var x=Math.max(0,Math.min(rect.width,e.clientX-rect.left));
+  var prog=x/rect.width;
+  document.getElementById('tl-fill').style.width=(prog*100)+'%';
+  document.getElementById('tl-thumb').style.left=(prog*100)+'%';
+});
+document.addEventListener('mouseup',function(){
+  if(isDragging){
+    isDragging=false;
+    var thumb=document.getElementById('tl-thumb');
+    var prog=parseFloat(thumb.style.left)/100;
+    goToProgress(prog);
+  }
+});
+document.getElementById('tl-track').addEventListener('click',function(e){
+  if(isDragging)return;
+  if(isPlaying)pause();
+  var rect=this.getBoundingClientRect();
+  var prog=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
+  goToProgress(prog);
+});
+
+// === MODE/SPEED CHANGE ===
+document.getElementById('mode-select').addEventListener('change',function(){
+  var oldMode = currentMode;
+  var newMode = this.value;
+  if (oldMode === newMode) return;
+  stop();
+  // Запоминаем точку-якорь в старом режиме
+  var oldProgress = steps[currentStep] || 0;
+  var visible = getVisible(oldProgress, oldMode);
+  var anchor = getCurrentAnchorPoint(visible, oldMode);
+  var anchorId = anchor ? anchor.id : null;
+  // Переключаем режим и пересобираем шаги
+  currentMode = newMode;
+  var mode = newMode;
+  var dated=DATA.filter(function(p){return p.date}).map(function(p){
+    return Object.assign({},p,{parsedDate:parseDate(p.date)});
+  }).filter(function(p){return p.parsedDate});
+  var undated=DATA.filter(function(p){return !p.date});
+  steps=[];
+  if(mode==='event'){
+    var sorted=dated.sort(function(a,b){return a.parsedDate-b.parsedDate})
+      .concat(undated.sort(function(a,b){return (a.order||0)-(b.order||0)}));
+    for(var i=1;i<=sorted.length;i++)steps.push(i/sorted.length);
+  }else{
+    for(var i=0;i<=40;i++)steps.push(i/40);
+  }
+  // Находим новую позицию для якоря в новом режиме
+  var newPos;
+  if (anchorId) {
+    newPos = findProgressByPointId(anchorId, newMode);
+  } else {
+    newPos = { progress: 0, stepIndex: 0 };
+  }
+  currentStep = newPos.stepIndex;
+  renderAtProgress(newPos.progress, true, 'keep');
+  highlightActiveRow(newPos.progress);
+});
+
+// === ZOOM PANEL ===
+document.getElementById('max-zoom-select').addEventListener('change', function() {
+  var z = parseInt(this.value, 10);
+  if (!map) return;
+  map.setMaxZoom(z);
+  map.eachLayer(function(layer) {
+    if (layer.options && layer.options.maxZoom !== undefined) {
+      layer.options.maxZoom = z;
+    }
+  });
+  if (map.getZoom() > z) {
+    map.setZoom(z);
+  }
+});
+
+// === BINDINGS ===
+document.getElementById('play-btn').addEventListener('click',togglePlay);
+document.getElementById('reset-btn').addEventListener('click',resetAll);
+
+// === START ===
+build();
+</script>
+</body>
+</html>
