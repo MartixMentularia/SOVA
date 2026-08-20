@@ -1,0 +1,138 @@
+{
+  "format": "SOVA-PROJECT",
+  "version": "0.4",
+  "source": "Kyodo",
+  "textHash": "",
+  "toponyms": [
+  {
+    "id": "t-001",
+    "name": "Лондон",
+    "lat": 51.5074,
+    "lon": -0.1278,
+    "date": "1898",
+    "group": "города",
+    "order": 1,
+    "description": "Соединенное Королевство Великобритании и Северной Ирландии\nhttps://macs.mainichi.co.jp/data/data/pdf/MainichiNOW2026.pdf?260401"
+  },
+  {
+    "id": "t-002",
+    "name": "Вашингтон",
+    "lat": 38.9072,
+    "lon": -77.0369,
+    "date": "1898",
+    "group": "города",
+    "order": 2,
+    "description": "Соединенные Штаты Америки\nhttps://macs.mainichi.co.jp/data/data/pdf/MainichiNOW2026.pdf?260401"
+  },
+  {
+    "id": "t-003",
+    "name": "Пекин",
+    "lat": 39.9042,
+    "lon": 116.4074,
+    "date": "1900",
+    "group": "города",
+    "order": 3,
+    "description": "Китайская Народная Республика\nhttps://macs.mainichi.co.jp/data/data/pdf/MainichiNOW2026.pdf?260401"
+  },
+  {
+    "id": "t-004",
+    "name": "Сеул",
+    "lat": 37.5665,
+    "lon": 126.978,
+    "date": "1900",
+    "group": "города",
+    "order": 4,
+    "description": "Республика Корея\nhttps://macs.mainichi.co.jp/data/data/pdf/MainichiNOW2026.pdf?260401"
+  },
+  {
+    "id": "t-005",
+    "name": "Нью-Йорк",
+    "lat": 40.7128,
+    "lon": -74.006,
+    "date": "1919",
+    "group": "города",
+    "order": 5,
+    "description": "Соединенные Штаты Америки\nhttps://macs.mainichi.co.jp/data/data/pdf/MainichiNOW2026.pdf?260401"
+  },
+  {
+    "id": "t-006",
+    "name": "Тайбэй",
+    "lat": 25.033,
+    "lon": 121.5654,
+    "date": "1924",
+    "group": "города",
+    "order": 6,
+    "description": "Китайская Республика (Тайвань)\nhttps://macs.mainichi.co.jp/data/data/pdf/MainichiNOW2026.pdf?260401"
+  },
+  {
+    "id": "t-007",
+    "name": "Москва",
+    "lat": 55.7558,
+    "lon": 37.6173,
+    "date": "1957",
+    "group": "города",
+    "order": 7,
+    "description": "Российская Федерация\nhttps://macs.mainichi.co.jp/data/data/pdf/MainichiNOW2026.pdf?260401"
+  },
+  {
+    "id": "t-008",
+    "name": "Нью-Дели",
+    "lat": 28.6139,
+    "lon": 77.209,
+    "date": "1959",
+    "group": "города",
+    "order": 8,
+    "description": "Республика Индия\nhttps://macs.mainichi.co.jp/data/data/pdf/MainichiNOW2026.pdf?260401"
+  },
+  {
+    "id": "t-009",
+    "name": "Брюссель",
+    "lat": 50.8503,
+    "lon": 4.3517,
+    "date": "1998",
+    "group": "города",
+    "order": 9,
+    "description": "Королевство Бельгия\nhttps://macs.mainichi.co.jp/data/data/pdf/MainichiNOW2026.pdf?260401"
+  },
+  {
+    "id": "t-010",
+    "name": "Берлин",
+    "lat": 52.52,
+    "lon": 13.405,
+    "date": "",
+    "group": "города",
+    "order": 10,
+    "description": "Федеративная Республика Германия\nhttps://macs.mainichi.co.jp/data/data/pdf/MainichiNOW2026.pdf?260401"
+  },
+  {
+    "id": "t-011",
+    "name": "Каир",
+    "lat": 30.0444,
+    "lon": 31.2357,
+    "date": "",
+    "group": "города",
+    "order": 11,
+    "description": "Арабская Республика Египет\nhttps://macs.mainichi.co.jp/data/data/pdf/MainichiNOW2026.pdf?260401"
+  },
+  {
+    "id": "t-012",
+    "name": "Иерусалим",
+    "lat": 31.7683,
+    "lon": 35.2137,
+    "date": "",
+    "group": "города",
+    "order": 12,
+    "description": "Государство Израиль\nhttps://macs.mainichi.co.jp/data/data/pdf/MainichiNOW2026.pdf?260401"
+  },
+  {
+    "id": "t-013",
+    "name": "Бангкок",
+    "lat": 13.7563,
+    "lon": 100.5018,
+    "date": "",
+    "group": "города",
+    "order": 13,
+    "description": "Королевство Таиланд\nhttps://macs.mainichi.co.jp/data/data/pdf/MainichiNOW2026.pdf?260401"
+  }
+]
+}
