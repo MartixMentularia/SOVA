@@ -1,0 +1,448 @@
+{
+  "format": "SOVA-MARKUP",
+  "version": "0.4",
+  "source": "Москва.sova.txt",
+  "toponyms": [
+    {
+      "id": "t-001",
+      "uid": "",
+      "text": "Москве",
+      "context_before": "сходили, еще там, в ",
+      "context_after": ", а где они теперь! ",
+      "name": "Москва",
+      "status": "suggested"
+    },
+    {
+      "id": "t-002",
+      "uid": "",
+      "text": "Большая Садовая",
+      "context_before": "ка-Козырь в работе (",
+      "context_after": ", Никольская церковь",
+      "name": "улица Большая Садовая",
+      "status": "suggested"
+    },
+    {
+      "id": "t-003",
+      "uid": "",
+      "text": "Никольская церковь",
+      "context_before": "е (Большая Садовая, ",
+      "context_after": ", Аптекарский\nпереул",
+      "name": "Никольская церковь",
+      "status": "suggested"
+    },
+    {
+      "id": "t-004",
+      "uid": "",
+      "text": "Никольской церкви",
+      "context_before": "еулке, где спуск от ",
+      "context_after": ", - знаешь? Я тебе б",
+      "name": "Никольская церковь",
+      "status": "suggested"
+    },
+    {
+      "id": "t-005",
+      "uid": "",
+      "text": "Никольской церкви",
+      "context_before": " Понял?\n38\nСпуск от ",
+      "context_after": " (вид с улицы Заливн",
+      "name": "Никольская церковь",
+      "status": "suggested"
+    },
+    {
+      "id": "t-006",
+      "uid": "",
+      "text": "улицы Заливной",
+      "context_before": "ьской церкви (вид с ",
+      "context_after": "), Томск, фото нач. ",
+      "name": "улица Заливная",
+      "status": "suggested"
+    },
+    {
+      "id": "t-007",
+      "uid": "",
+      "text": "Томск",
+      "context_before": " с улицы Заливной), ",
+      "context_after": ", фото нач. ХХ века.",
+      "name": "Томск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-008",
+      "uid": "",
+      "text": "Благовещенского",
+      "context_before": "тот же день на углу ",
+      "context_after": " /пер. Батенькова/ и",
+      "name": "переулок Благовещенский",
+      "status": "suggested"
+    },
+    {
+      "id": "t-009",
+      "uid": "",
+      "text": "пер. Батенькова",
+      "context_before": "лу Благовещенского /",
+      "context_after": "/ и\nАптекарского пер",
+      "name": "переулок Батенькова",
+      "status": "suggested"
+    },
+    {
+      "id": "t-010",
+      "uid": "",
+      "text": "Аптекарского переулков",
+      "context_before": "/пер. Батенькова/ и\n",
+      "context_after": " чернела крытая прол",
+      "name": "Аптекарский переулок",
+      "status": "suggested"
+    },
+    {
+      "id": "t-011",
+      "uid": "",
+      "text": "Никольской церкви",
+      "context_before": "рязь.\nНа колокольне ",
+      "context_after": " раздался мелкий пер",
+      "name": "Никольская церковь",
+      "status": "suggested"
+    },
+    {
+      "id": "t-012",
+      "uid": "",
+      "text": "Аптекарскому переулку",
+      "context_before": "вязью, пронеслась по\n",
+      "context_after": " по направлению к Уш",
+      "name": "Аптекарский переулок",
+      "status": "suggested"
+    },
+    {
+      "id": "t-013",
+      "uid": "",
+      "text": "Ушайке",
+      "context_before": "ку по направлению к ",
+      "context_after": ".\n39\nАптекарский мос",
+      "name": "Ушайка",
+      "status": "suggested"
+    },
+    {
+      "id": "t-014",
+      "uid": "",
+      "text": "Аптекарский мост",
+      "context_before": "влению к Ушайке.\n39\n",
+      "context_after": ", Томск, фото нач. Х",
+      "name": "Аптекарский мост",
+      "status": "suggested"
+    },
+    {
+      "id": "t-015",
+      "uid": "",
+      "text": "Томск",
+      "context_before": "9\nАптекарский мост, ",
+      "context_after": ", фото нач. ХХ века.",
+      "name": "Томск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-016",
+      "uid": "",
+      "text": "Ушайки",
+      "context_before": "отивоположный берег ",
+      "context_after": ".\n- Прямо, потом нап",
+      "name": "Ушайка",
+      "status": "suggested"
+    },
+    {
+      "id": "t-017",
+      "uid": "",
+      "text": "Бочановской улицы",
+      "context_before": "шеным галопом вдоль\n",
+      "context_after": " /ныне, Петропавловс",
+      "name": "улица Бочановская",
+      "status": "suggested"
+    },
+    {
+      "id": "t-018",
+      "uid": "",
+      "text": "Петропавловской",
+      "context_before": "овской улицы /ныне, ",
+      "context_after": "/, Сенька повернул н",
+      "name": "улица Петропавловская",
+      "status": "suggested"
+    },
+    {
+      "id": "t-019",
+      "uid": "",
+      "text": "Тверскую",
+      "context_before": " Сенька повернул на ",
+      "context_after": ". Всякая\nопасность п",
+      "name": "улица Тверская",
+      "status": "suggested"
+    },
+    {
+      "id": "t-020",
+      "uid": "",
+      "text": "улице Петропавловской",
+      "context_before": "а избегнута.\nДом на ",
+      "context_after": ", 29. Снимок начала ",
+      "name": "улица Петропавловская",
+      "status": "suggested"
+    },
+    {
+      "id": "t-021",
+      "uid": "",
+      "text": "улице Тверской",
+      "context_before": " ХХ века.\n40\nДом на ",
+      "context_after": ", 27 (предместье Мух",
+      "name": "улица Тверская",
+      "status": "suggested"
+    },
+    {
+      "id": "t-022",
+      "uid": "",
+      "text": "Мухин бугор",
+      "context_before": "кой, 27 (предместье ",
+      "context_after": "). Снимок 20-х годов",
+      "name": "Мухин бугор",
+      "status": "suggested"
+    },
+    {
+      "id": "t-023",
+      "uid": "",
+      "text": "России",
+      "context_before": "нный человек, а и в ",
+      "context_after": " таких делов не обде",
+      "name": "Россия",
+      "status": "suggested"
+    },
+    {
+      "id": "t-024",
+      "uid": "",
+      "text": "Верхняя Елань",
+      "context_before": "ед потерян (Егорин; ",
+      "context_after": ")\nДня через два посл",
+      "name": "Верхняя Елань",
+      "status": "suggested"
+    },
+    {
+      "id": "t-025",
+      "uid": "",
+      "text": "томск",
+      "context_before": "держателем одной из ",
+      "context_after": "их первоклассных гос",
+      "name": "Томск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-026",
+      "uid": "",
+      "text": "томских",
+      "context_before": "держателем одной из ",
+      "context_after": " первоклассных гости",
+      "name": "Томск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-027",
+      "uid": "",
+      "text": "Иркутска",
+      "context_before": "овека, приезжего из ",
+      "context_after": ". По\nпоказаниям кори",
+      "name": "Иркутск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-028",
+      "uid": "",
+      "text": "Верхней Елани",
+      "context_before": "ся\".\nДом Егорина на ",
+      "context_after": ", улица Большая Садо",
+      "name": "Верхняя Елань",
+      "status": "suggested"
+    },
+    {
+      "id": "t-029",
+      "uid": "",
+      "text": "улица Большая Садовая",
+      "context_before": "а на Верхней Елани, ",
+      "context_after": " (пр. Ленина),\nфото ",
+      "name": "улица Большая Садовая",
+      "status": "suggested"
+    },
+    {
+      "id": "t-030",
+      "uid": "",
+      "text": "пр. Ленина",
+      "context_before": "ца Большая Садовая (",
+      "context_after": "),\nфото неизвестного",
+      "name": "проспект Ленина",
+      "status": "suggested"
+    },
+    {
+      "id": "t-031",
+      "uid": "",
+      "text": "Томск",
+      "context_before": "еизвестного автора, ",
+      "context_after": ", ХХ век.\n41\nЕгорин ",
+      "name": "Томск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-032",
+      "uid": "",
+      "text": "трактире Никиты Рыжего",
+      "context_before": "едькой-\nмаленьким в ",
+      "context_after": ", передал свои подоз",
+      "name": "трактир Никиты Рыжего",
+      "status": "suggested"
+    },
+    {
+      "id": "t-033",
+      "uid": "",
+      "text": "город",
+      "context_before": "небольшой конверт с ",
+      "context_after": "ской\nмаркой.\nРазорва",
+      "name": "город",
+      "status": "suggested"
+    },
+    {
+      "id": "t-034",
+      "uid": "",
+      "text": "г. Иркутск",
+      "context_before": ", в углу карточки: \"",
+      "context_after": "\".\nЗалетный недоумен",
+      "name": "город Иркутск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-035",
+      "uid": "",
+      "text": "Московском тракте",
+      "context_before": ".\nТеатр Королева на ",
+      "context_after": ", с открытки начала ",
+      "name": "Московский тракт",
+      "status": "suggested"
+    },
+    {
+      "id": "t-036",
+      "uid": "",
+      "text": "Московский тракт",
+      "context_before": "В театре (Залетный; ",
+      "context_after": ")\nЧасов около восьми",
+      "name": "Московский тракт",
+      "status": "suggested"
+    },
+    {
+      "id": "t-037",
+      "uid": "",
+      "text": "город",
+      "context_before": "сьми вечера подъезд ",
+      "context_after": "ского театра был ярк",
+      "name": "город",
+      "status": "suggested"
+    },
+    {
+      "id": "t-038",
+      "uid": "",
+      "text": "томск",
+      "context_before": "закрытыми колясками\n",
+      "context_after": "ой буржуазии и конча",
+      "name": "Томск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-039",
+      "uid": "",
+      "text": "томской",
+      "context_before": "закрытыми колясками\n",
+      "context_after": " буржуазии и кончая ",
+      "name": "Томск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-040",
+      "uid": "",
+      "text": "город",
+      "context_before": "поряжении несколько ",
+      "context_after": "овых, энергично наво",
+      "name": "город",
+      "status": "suggested"
+    },
+    {
+      "id": "t-041",
+      "uid": "",
+      "text": "томи",
+      "context_before": "и продолжалось это\nу",
+      "context_after": "тельное для Залетног",
+      "name": "Томь",
+      "status": "suggested"
+    },
+    {
+      "id": "t-042",
+      "uid": "",
+      "text": "Томи",
+      "context_before": "а окне, выходящем к ",
+      "context_after": ". Понял?\n- В точност",
+      "name": "Томь",
+      "status": "suggested"
+    },
+    {
+      "id": "t-043",
+      "uid": "",
+      "text": "Нижняя Елань",
+      "context_before": ". Александр и Катя (",
+      "context_after": " вблизи Большой Садо",
+      "name": "Нижняя Елань",
+      "status": "suggested"
+    },
+    {
+      "id": "t-044",
+      "uid": "",
+      "text": "Никольской церкви",
+      "context_before": ", что видела тебя в ",
+      "context_after": ", у\nвсенощной. Тогда",
+      "name": "Никольская церковь",
+      "status": "suggested"
+    },
+    {
+      "id": "t-045",
+      "uid": "",
+      "text": "Московский тракт",
+      "context_before": "\n- Какая улица! Это ",
+      "context_after": " будеть… аль ты не з",
+      "name": "Московский тракт",
+      "status": "suggested"
+    },
+    {
+      "id": "t-046",
+      "uid": "",
+      "text": "Большеподгорную",
+      "context_before": "ся в долгий путь на ",
+      "context_after": ".\nОзеро у Московског",
+      "name": "Большеподгорная",
+      "status": "suggested"
+    },
+    {
+      "id": "t-047",
+      "uid": "",
+      "text": "Университетское",
+      "context_before": "Московского тракта (",
+      "context_after": "), Томск, 1905 год.\n",
+      "name": "Университетское",
+      "status": "suggested"
+    },
+    {
+      "id": "t-048",
+      "uid": "",
+      "text": "Томск",
+      "context_before": " (Университетское), ",
+      "context_after": ", 1905 год.\nТреволне",
+      "name": "Томск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-049",
+      "uid": "",
+      "text": "город",
+      "context_before": "аботника я послал в ",
+      "context_after": " за овсом… Говори см",
+      "name": "город",
+      "status": "suggested"
+    }
+  ]
+}

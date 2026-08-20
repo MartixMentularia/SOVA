@@ -1,0 +1,538 @@
+{
+  "format": "SOVA-MARKUP",
+  "version": "0.4",
+  "source": "проспект Кирова.sova.txt",
+  "toponyms": [
+    {
+      "id": "t-001",
+      "uid": "",
+      "text": "проспекте Кирова",
+      "context_before": "24\nДом на ",
+      "context_after": " /бывшей ул. Бульвар",
+      "name": "проспект Кирова",
+      "status": "suggested"
+    },
+    {
+      "id": "t-002",
+      "uid": "",
+      "text": "ул. Бульварной",
+      "context_before": "екте Кирова /бывшей ",
+      "context_after": "/, фото П. Коханенко",
+      "name": "улица Бульварная",
+      "status": "suggested"
+    },
+    {
+      "id": "t-003",
+      "uid": "",
+      "text": "Савкино",
+      "context_before": "о закусив,\nпокинули ",
+      "context_after": " заведение. Козырь б",
+      "name": "Савкино",
+      "status": "suggested"
+    },
+    {
+      "id": "t-004",
+      "uid": "",
+      "text": "Бульварного",
+      "context_before": "ксандр, свертывая с ",
+      "context_after": " /ныне,\nпр. Кирова/.",
+      "name": "улица Бульварная",
+      "status": "suggested"
+    },
+    {
+      "id": "t-005",
+      "uid": "",
+      "text": "пр. Кирова",
+      "context_before": " Бульварного /ныне,\n",
+      "context_after": "/.\n- Вот что, Семен,",
+      "name": "проспект Кирова",
+      "status": "suggested"
+    },
+    {
+      "id": "t-006",
+      "uid": "",
+      "text": "Большую Садовую",
+      "context_before": "ловой. Они вышли на ",
+      "context_after": " (пр. Ленина). Здесь",
+      "name": "улица Большая Садовая",
+      "status": "suggested"
+    },
+    {
+      "id": "t-007",
+      "uid": "",
+      "text": "пр. Ленина",
+      "context_before": "на Большую Садовую (",
+      "context_after": "). Здесь\nКозырю труд",
+      "name": "проспект Ленина",
+      "status": "suggested"
+    },
+    {
+      "id": "t-008",
+      "uid": "",
+      "text": "Томск",
+      "context_before": "ение по ней\nбольше…\n",
+      "context_after": " начала ХХ века, ули",
+      "name": "Томск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-009",
+      "uid": "",
+      "text": "улица Большая Садовая",
+      "context_before": "мск начала ХХ века, ",
+      "context_after": " /ныне пр. Ленина/.\n",
+      "name": "улица Большая Садовая",
+      "status": "suggested"
+    },
+    {
+      "id": "t-010",
+      "uid": "",
+      "text": "пр. Ленина",
+      "context_before": "льшая Садовая /ныне ",
+      "context_after": "/.\n25\nТомск начала Х",
+      "name": "проспект Ленина",
+      "status": "suggested"
+    },
+    {
+      "id": "t-011",
+      "uid": "",
+      "text": "Томск",
+      "context_before": "ыне пр. Ленина/.\n25\n",
+      "context_after": " начала ХХ века, на ",
+      "name": "Томск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-012",
+      "uid": "",
+      "text": "улице Большой Садовой",
+      "context_before": " начала ХХ века, на ",
+      "context_after": " /ныне пр. Ленина/.\n",
+      "name": "улица Большая Садовая",
+      "status": "suggested"
+    },
+    {
+      "id": "t-013",
+      "uid": "",
+      "text": "пр. Ленина",
+      "context_before": "льшой Садовой /ныне ",
+      "context_after": "/.\nПоравнявшись с бо",
+      "name": "проспект Ленина",
+      "status": "suggested"
+    },
+    {
+      "id": "t-014",
+      "uid": "",
+      "text": "улице Большой Садовой",
+      "context_before": "кал дворник.\nДом на ",
+      "context_after": " (ныне пр. Ленина), ",
+      "name": "улица Большая Садовая",
+      "status": "suggested"
+    },
+    {
+      "id": "t-015",
+      "uid": "",
+      "text": "пр. Ленина",
+      "context_before": "льшой Садовой (ныне ",
+      "context_after": "), фото П. Коханенко",
+      "name": "проспект Ленина",
+      "status": "suggested"
+    },
+    {
+      "id": "t-016",
+      "uid": "",
+      "text": "Томск",
+      "context_before": "отца, он вернулся в ",
+      "context_after": ". Устроил дела по\nвв",
+      "name": "Томск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-017",
+      "uid": "",
+      "text": "России",
+      "context_before": "н привез с собой из ",
+      "context_after": " целый арсенал дорог",
+      "name": "Россия",
+      "status": "suggested"
+    },
+    {
+      "id": "t-018",
+      "uid": "",
+      "text": "России",
+      "context_before": "Артемьевичем\nеще из ",
+      "context_after": ". Весь штат прислуги",
+      "name": "Россия",
+      "status": "suggested"
+    },
+    {
+      "id": "t-019",
+      "uid": "",
+      "text": "Дальнеключевская",
+      "context_before": "Холмса (Егорин; ул. ",
+      "context_after": ", Кирпичи)\nЗалетный ",
+      "name": "улица Дальнеключевская",
+      "status": "suggested"
+    },
+    {
+      "id": "t-020",
+      "uid": "",
+      "text": "Кирпичи",
+      "context_before": ". Дальнеключевская, ",
+      "context_after": ")\nЗалетный очнулся и",
+      "name": "Кирпичи",
+      "status": "suggested"
+    },
+    {
+      "id": "t-021",
+      "uid": "",
+      "text": "Иркутска",
+      "context_before": "аером - купчиком из ",
+      "context_after": ". Обвели мы его и по",
+      "name": "Иркутск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-022",
+      "uid": "",
+      "text": "Малая Кирпичная",
+      "context_before": "вещах).\n29\nНа улице ",
+      "context_after": " (сейчас, Песочный п",
+      "name": "улица Малая Кирпичная",
+      "status": "suggested"
+    },
+    {
+      "id": "t-023",
+      "uid": "",
+      "text": "Песочный пер",
+      "context_before": " Кирпичная (сейчас, ",
+      "context_after": "), рис. Н. Жегалова,",
+      "name": "Песочный переулок",
+      "status": "suggested"
+    },
+    {
+      "id": "t-024",
+      "uid": "",
+      "text": "Томск",
+      "context_before": ", рис. Н. Жегалова, ",
+      "context_after": ", 1921 г.\nВыйдя из п",
+      "name": "Томск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-025",
+      "uid": "",
+      "text": "Никиты Рыжего",
+      "context_before": "по улице к\nтрактиру ",
+      "context_after": ". К тому времени уже",
+      "name": "трактир Никиты Рыжего",
+      "status": "suggested"
+    },
+    {
+      "id": "t-026",
+      "uid": "",
+      "text": "Никитки Рыжего",
+      "context_before": "комнате трактира, у\n",
+      "context_after": ". Поданная дюжина пи",
+      "name": "трактир Никитки Рыжего",
+      "status": "suggested"
+    },
+    {
+      "id": "t-027",
+      "uid": "",
+      "text": "Верхняя Елань",
+      "context_before": "м кабинете (Егорин; ",
+      "context_after": ", гостиница Россия)\n",
+      "name": "Верхняя Елань",
+      "status": "suggested"
+    },
+    {
+      "id": "t-028",
+      "uid": "",
+      "text": "Верхнюю Елань",
+      "context_before": "направился домой на ",
+      "context_after": ". Около\nДумского мос",
+      "name": "Верхняя Елань",
+      "status": "suggested"
+    },
+    {
+      "id": "t-029",
+      "uid": "",
+      "text": "Томского",
+      "context_before": "- думал\nон.\nЛазарет ",
+      "context_after": " гарнизона в Верхней",
+      "name": "Томский",
+      "status": "suggested"
+    },
+    {
+      "id": "t-030",
+      "uid": "",
+      "text": "Верхней Елани",
+      "context_before": "омского гарнизона в ",
+      "context_after": " на перекрестке улиц",
+      "name": "Верхняя Елань",
+      "status": "suggested"
+    },
+    {
+      "id": "t-031",
+      "uid": "",
+      "text": "Еланской",
+      "context_before": "на перекрестке улиц ",
+      "context_after": "\n/Советской/ и Симон",
+      "name": "улица Еланская",
+      "status": "suggested"
+    },
+    {
+      "id": "t-032",
+      "uid": "",
+      "text": "Советской",
+      "context_before": "стке улиц Еланской\n/",
+      "context_after": "/ и Симоновой /Учебн",
+      "name": "улица Советская",
+      "status": "suggested"
+    },
+    {
+      "id": "t-033",
+      "uid": "",
+      "text": "Симоновой",
+      "context_before": "нской\n/Советской/ и ",
+      "context_after": " /Учебной/, фото 190",
+      "name": "улица Симонова",
+      "status": "suggested"
+    },
+    {
+      "id": "t-034",
+      "uid": "",
+      "text": "Учебной",
+      "context_before": "тской/ и Симоновой /",
+      "context_after": "/, фото 1904 года.\nД",
+      "name": "улица Учебная",
+      "status": "suggested"
+    },
+    {
+      "id": "t-035",
+      "uid": "",
+      "text": "Ушайку",
+      "context_before": "\nДумский мост через ",
+      "context_after": ".\n32\nПодъехав к свое",
+      "name": "Ушайка",
+      "status": "suggested"
+    },
+    {
+      "id": "t-036",
+      "uid": "",
+      "text": "Верхней Елани",
+      "context_before": "скоро уснул.\nДом на ",
+      "context_after": " на ул. Большой Садо",
+      "name": "Верхняя Елань",
+      "status": "suggested"
+    },
+    {
+      "id": "t-037",
+      "uid": "",
+      "text": "ул. Большой Садовой",
+      "context_before": "на Верхней Елани на ",
+      "context_after": " (сейчас, пр. Ленина",
+      "name": "улица Большая Садовая",
+      "status": "suggested"
+    },
+    {
+      "id": "t-038",
+      "uid": "",
+      "text": "пр. Ленина",
+      "context_before": "ой Садовой (сейчас, ",
+      "context_after": ", 8), фото Н.\nПетров",
+      "name": "проспект Ленина",
+      "status": "suggested"
+    },
+    {
+      "id": "t-039",
+      "uid": "",
+      "text": "Ухареву",
+      "context_before": "еднего, объяснил:\nК ",
+      "context_after": " поедем, он обещал н",
+      "name": "Ухарев",
+      "status": "suggested"
+    },
+    {
+      "id": "t-040",
+      "uid": "",
+      "text": "Орлихе",
+      "context_before": "шь куда зальемся? К\n",
+      "context_after": "!\n- Чего там не вида",
+      "name": "Орлиха",
+      "status": "suggested"
+    },
+    {
+      "id": "t-041",
+      "uid": "",
+      "text": "\"Россию\"",
+      "context_before": " и покатили прямо в ",
+      "context_after": ".\nЗдание бывшей гост",
+      "name": "\"Россия\"",
+      "status": "suggested"
+    },
+    {
+      "id": "t-042",
+      "uid": "",
+      "text": "«Россия»",
+      "context_before": "ие бывшей гостиницы ",
+      "context_after": " на перекрестке Спас",
+      "name": "«Россия»",
+      "status": "suggested"
+    },
+    {
+      "id": "t-043",
+      "uid": "",
+      "text": "Спасской",
+      "context_before": "сия» на перекрестке ",
+      "context_after": " (Советская) и Нечае",
+      "name": "улица Спасская",
+      "status": "suggested"
+    },
+    {
+      "id": "t-044",
+      "uid": "",
+      "text": "Нечаевской",
+      "context_before": "сской (Советская) и ",
+      "context_after": " (\nпр. Фрунзе), фото",
+      "name": "улица Нечаевская",
+      "status": "suggested"
+    },
+    {
+      "id": "t-045",
+      "uid": "",
+      "text": "пр. Фрунзе",
+      "context_before": "кая) и Нечаевской (\n",
+      "context_after": "), фото 70-х годов Х",
+      "name": "проспект Фрунзе",
+      "status": "suggested"
+    },
+    {
+      "id": "t-046",
+      "uid": "",
+      "text": "«Россия»",
+      "context_before": "ом номере гостиницы ",
+      "context_after": "\n(перекресток Спасск",
+      "name": "«Россия»",
+      "status": "suggested"
+    },
+    {
+      "id": "t-047",
+      "uid": "",
+      "text": "Спасской",
+      "context_before": "оссия»\n(перекресток ",
+      "context_after": " /Советская/ и Нечае",
+      "name": "улица Спасская",
+      "status": "suggested"
+    },
+    {
+      "id": "t-048",
+      "uid": "",
+      "text": "Нечаевской",
+      "context_before": "сской /Советская/ и ",
+      "context_after": " /пр. Фрунзе/), Конд",
+      "name": "улица Нечаевская",
+      "status": "suggested"
+    },
+    {
+      "id": "t-049",
+      "uid": "",
+      "text": "пр. Фрунзе",
+      "context_before": "ская/ и Нечаевской /",
+      "context_after": "/), Кондратий Егорин",
+      "name": "проспект Фрунзе",
+      "status": "suggested"
+    },
+    {
+      "id": "t-050",
+      "uid": "",
+      "text": "Троицкий собор",
+      "context_before": "й Егорин\nсмотрит на ",
+      "context_after": " (Соборная площадь г",
+      "name": "Троицкий собор",
+      "status": "suggested"
+    },
+    {
+      "id": "t-051",
+      "uid": "",
+      "text": "Соборная площадь",
+      "context_before": " на Троицкий собор (",
+      "context_after": " г. Томска)».\nЛакей ",
+      "name": "Соборная площадь",
+      "status": "suggested"
+    },
+    {
+      "id": "t-052",
+      "uid": "",
+      "text": "г. Томска",
+      "context_before": "р (Соборная площадь ",
+      "context_after": ")».\nЛакей вышел из к",
+      "name": "город Томск",
+      "status": "suggested"
+    },
+    {
+      "id": "t-053",
+      "uid": "",
+      "text": "пр. Фрунзе",
+      "context_before": "чевскую улицу (ныне ",
+      "context_after": "), приподнял\nтяжелую",
+      "name": "проспект Фрунзе",
+      "status": "suggested"
+    },
+    {
+      "id": "t-054",
+      "uid": "",
+      "text": "улицы Нечевской",
+      "context_before": " стемнело…\n35\nВид с ",
+      "context_after": " (сейчас пр. Фрунзе)",
+      "name": "улица Нечаевская",
+      "status": "suggested"
+    },
+    {
+      "id": "t-055",
+      "uid": "",
+      "text": "пр. Фрунзе",
+      "context_before": "ы Нечевской (сейчас ",
+      "context_after": ") на Троицкий собор,",
+      "name": "проспект Фрунзе",
+      "status": "suggested"
+    },
+    {
+      "id": "t-056",
+      "uid": "",
+      "text": "Троицкий собор",
+      "context_before": "йчас пр. Фрунзе) на ",
+      "context_after": ", фото конца ХIХ век",
+      "name": "Троицкий собор",
+      "status": "suggested"
+    },
+    {
+      "id": "t-057",
+      "uid": "",
+      "text": "Орлихе",
+      "context_before": "посылай извозчика к ",
+      "context_after": ".\n- Слушаю-с…\nНа сто",
+      "name": "Орлиха",
+      "status": "suggested"
+    },
+    {
+      "id": "t-058",
+      "uid": "",
+      "text": "Сибири",
+      "context_before": "ах.\n- Откуда мне… в ",
+      "context_after": " их нет! Думаю, прив",
+      "name": "Сибирь",
+      "status": "suggested"
+    },
+    {
+      "id": "t-059",
+      "uid": "",
+      "text": "Москва",
+      "context_before": "ь надо… Это тебе не ",
+      "context_after": "! - вставил Егорин,\n",
+      "name": "Москва",
+      "status": "suggested"
+    }
+  ]
+}
